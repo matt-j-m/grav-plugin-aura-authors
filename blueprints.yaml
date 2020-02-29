@@ -1,0 +1,101 @@
+name: Aura Authors
+version: 0.1.0
+description: Store author bios in a central repository for display on multiple pages.
+icon: users
+author:
+  name: Matt Mulhall
+  email: matt@theskylab.net
+  url: https://www.theskylab.net
+homepage: https://github.com/matt-j-m/grav-plugin-aura-authors
+keywords: author, bio, blog
+bugs: https://github.com/matt-j-m/grav-plugin-aura-authors/issues
+license: MIT
+
+form:
+  validation: strict
+  fields:
+    enabled:
+      type: toggle
+      label: PLUGIN_ADMIN.PLUGIN_STATUS
+      highlight: 1
+      default: 0
+      options:
+        1: PLUGIN_ADMIN.ENABLED
+        0: PLUGIN_ADMIN.DISABLED
+      validate:
+        type: bool
+    include-css:
+      type: toggle
+      label: Include default CSS
+      highlight: 1
+      default: 1
+      options:
+        1: PLUGIN_ADMIN.ENABLED
+        0: PLUGIN_ADMIN.DISABLED
+      validate:
+        type: bool
+    authors:
+      type: list
+      label: Author details
+      help: "Add or edit author details"
+      fields:
+        .name:
+          type: text
+          size: large
+          label: Name
+          validate:
+            required: true
+        .label:
+          type: text
+          size: large
+          label: Taxonomy Label
+          validate:
+            pattern: "[a-z][a-z0-9_\-]+"
+            message: "Use all lowercase letters and replace spaces with hyphens."
+            required: true
+        .image:
+          type: file
+          size: large
+          label: Image
+          multiple: false
+          destination: 'user/plugins/aura-authors/assets'
+          accept:
+          - image/*
+        .description:
+          type: textarea
+          size: long
+          label: Description
+        .facebook-url:
+          type: text
+          size: large
+          label: Facebook URL
+          placeholder: 'https://www.facebook.com/username'
+        .twitter-url:
+          type: text
+          size: large
+          label: Twitter URL
+          placeholder: 'https://twitter.com/username'
+        .instagram-url:
+          type: text
+          size: large
+          label: Instagram URL
+          placeholder: 'https://www.instagram.com/username'
+        .linkedin-url:
+          type: text
+          size: large
+          label: LinkedIn URL
+          placeholder: 'https://www.linkedin.com/in/name'
+        .pinterest-url:
+          type: text
+          size: large
+          label: Pinterest URL
+          placeholder: 'https://www.pinterest.com/user/username'
+        .youtube-url:
+          type: text
+          size: large
+          label: YouTube URL
+          placeholder: 'https://www.youtube.com/username'
+        .website-url:
+          type: text
+          label: Website URL
+          placeholder: 'https://www.example.com'

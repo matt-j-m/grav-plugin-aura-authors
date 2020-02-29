@@ -1,0 +1,44 @@
+{% set author = authors[page.header.aura.author] %}
+{% if author %}
+    {% set social = [
+        'twitter',
+        'linkedin',
+        'youtube',
+        'facebook',
+        'instagram',
+        'pinterest',
+        'website',
+    ] %}
+<div class="author-bio">
+    <p class="author-heading">About the author</p>
+    <hr />
+    {% if author.image %}
+        {% set path = 'user://plugins/aura-authors/assets/' ~ author.image|first.name %}
+        {{ media[path].html('', author.name, 'author-image') }}
+    {% endif %}
+    <div class="author-text">
+        <div>
+            <div class="author-name">
+                <p>{{ author.name }}</p>
+            </div>
+            <div class="author-social">
+                <ul>
+            {% for item in social %}
+                {% set href = author[item ~ '-url'] %}
+                {% if href %}
+                    <li><a href="{{ href }}" target="_blank"><span class="aura-icon-{{ item }}"></span></a></li>
+                {% endif %}
+            {% endfor %}
+                </ul>
+            </div>
+            <div class="clear-right"></div>
+        </div>
+        <div class="author-description">
+            <p>{{ author.description }}</p>
+        </div>
+    </div>
+</div>
+    {% if config.plugins['aura-authors']['include-css'] %}
+        {% do assets.addCss('user://plugins/aura-authors/assets/style.min.css') %}
+    {% endif %}
+{% endif %}

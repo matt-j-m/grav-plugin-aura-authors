@@ -1,0 +1,128 @@
+.author-bio {
+  background-color: #F5F5F5;
+  margin: 40px 0;
+  padding: 25px;
+  border-radius: 15px;
+  overflow: hidden;
+  .author-heading {
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+  }
+  hr {
+    margin: 5px 0 15px;
+    padding: 0;
+  }
+  .author-image {
+    border-radius: 50%;
+    width: 128px;
+    height: auto;
+    float: left;
+    margin: 0 25px 15px 0 !important;
+    padding: 0 !important;
+  }
+  .author-name {
+    float: left;
+    margin-bottom: 10px;
+    p {
+      font-weight: bolder;
+      margin: 0;
+      padding: 0;
+    }
+  }
+  .author-social {
+    float: right;
+    margin-bottom: 10px;
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      li {
+        display: inline;
+        &:not(:first-child) {
+          padding-left: 10px;
+        }
+        a, a:active, a:focus, a:hover {
+          text-decoration: none;
+        }
+      }
+    }
+  }
+  .clear-right {
+    clear: right;
+  }
+  .author-description {
+    p {
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+    }
+  }
+}
+
+@media only screen and (max-width : 767px) {
+  .author-bio {
+    .author-description {
+      p {
+        overflow: unset;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width : 575px) {
+  .author-bio {
+    .author-name, .author-social {
+      float: unset;
+    }
+  }
+}
+
+@font-face {
+  font-family: 'icomoon';
+  src:  url('fonts/icomoon.eot?aizbyq');
+  src:  url('fonts/icomoon.eot?aizbyq#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?aizbyq') format('truetype'),
+    url('fonts/icomoon.woff?aizbyq') format('woff'),
+    url('fonts/icomoon.svg?aizbyq#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="aura-icon-"], [class*=" aura-icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.aura-icon-website:before {
+  content: "\e9cb";
+}
+.aura-icon-facebook:before {
+  content: "\ea90";
+}
+.aura-icon-instagram:before {
+  content: "\ea92";
+}
+.aura-icon-twitter:before {
+  content: "\ea96";
+}
+.aura-icon-youtube:before {
+  content: "\ea9d";
+}
+.aura-icon-linkedin:before {
+  content: "\eaca";
+}
+.aura-icon-pinterest:before {
+  content: "\ead2";
+}
