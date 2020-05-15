@@ -1,9 +1,11 @@
 <?php
 namespace Grav\Plugin;
 
-use Grav\Common\Data;
 use Grav\Common\Plugin;
+use Grav\Common\Page\Page;
 use RocketTheme\Toolbox\Event\Event;
+use RocketTheme\Toolbox\File\File;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class AuraAuthorsPlugin
@@ -11,112 +13,101 @@ use RocketTheme\Toolbox\Event\Event;
  */
 class AuraAuthorsPlugin extends Plugin
 {
+    protected static $authorsFile = DATA_DIR . 'authors/authors.yaml';
+    protected $route = 'authors';
+    static protected $authorList = [];
 
-    /** @var array */
-    static protected $authorList = array();
-
-    /**
-     * @return array
-     */
-    public static function getSubscribedEvents()
+    public static function getAuthors()
     {
-        return [
-            'onPluginsInitialized' => ['onPluginsInitialized', 0],
-            'onTwigTemplatePaths' => ['onTwigTemplatePaths', 0],
-            'onPageInitialized' => ['onPageInitialized', 0],
-            'onTwigSiteVariables' => ['onTwigSiteVariables', 0],
-            'onBlueprintCreated' => ['onBlueprintCreated', 0],
-        ];
+        $fileInstance = File::instance(self::$authorsFile);
+        if (!$fileInstance->content()) {
+          return;
+        }
+        return Yaml::parse($fileInstance->content());
     }
 
-    /**
-     * Initialize configuration
-     */
+    public static function saveAuthors(array $authors)
+    {
+        $file = File::instance(self::$authorsFile);
+        $file->save(Yaml::dump($authors));
+        echo json_encode('Saved');
+    }
+
     public function onPluginsInitialized()
     {
-
-        // Add author to site taxonomies
-        $taxonomies = $this->config->get('site.taxonomies');
-        $taxonomies[] = 'author';
-        $this->config->set('site.taxonomies', $taxonomies);
-
-        // Populate author list for use in blueprint
-        $authors = $this->grav['config']->get('plugins.aura-authors.authors');
-        if ($authors) {
-            foreach ($authors as $author) {
-                if (!array_key_exists($author['label'], self::$authorList)) {
-                    self::$authorList[$author['label']] = $author['name'];
-                }
-            }
+        // Admin only events
+        if ($this->isAdmin()) {
+            $this->enable([
+                'onAdminMenu'         => ['onAdminMenu', 0],
+                'onTwigTemplatePaths' => ['onTwigTemplatePaths', 0],
+                'onPageInitialized'   => ['onPageInitialized', 0],
+                'onGetPageBlueprints' => ['onGetPageBlueprints', 0],
+                'onAdminSave' => ['onAdminSave', 0],
+            ]);
+            return;
         }
-        asort(self::$authorList);
-    }
 
+    }
 
     /**
      * Extend page blueprints with additional configuration options.
      *
      * @param Event $event
      */
-    public function onBlueprintCreated(Event $event)
+    public function onGetPageBlueprints($event)
     {
-        static $inEvent = false;
-
-        /** @var Data\Blueprint $blueprint */
-        $blueprint = $event['blueprint'];
-        if (!$inEvent && $blueprint->get('form/fields/tabs', null, '/')) {
-            $inEvent = true;
-            $blueprints = new Data\Blueprints(__DIR__ . '/blueprints/');
-            $extends = $blueprints->get('aura-authors');
-            $blueprint->extend($extends, true);
-            $inEvent = false;
-        }
+      $types = $event->types;
+      $types->scanBlueprints('plugins://' . $this->name . '/blueprints');
     }
 
-    /**
-     * Add plugin directory to twig lookup paths
-     */
-    public function onTwigTemplatePaths()
+    public function onAdminSave(Event $event)
     {
-        $this->grav['twig']->twig_paths[] = __DIR__ . '/templates';
-    }
-
-    /**
-     * Add author to page taxonomy
-     *
-     * @param Event $e
-     */
-    public function onPageInitialized()
-    {
-        if ($this->isAdmin()) {
+        // Don't proceed if Admin is not saving a Page
+        if (!$event['object'] instanceof Page) {
             return;
         }
+
+        $page = $event['object'];
+        if (isset($page->header()->aura['author'])) {
+            $author = array('author' => array($page->header()->aura['author']));
+            $page->header()->taxonomy = array_merge($page->header()->taxonomy, $author);
+        }
+
+    }
+
+    public function onPageInitialized()
+    {
         $page = $this->grav['page'];
-        $header = $page->header();
-        if ((isset($header->aura['author'])) && ($header->aura['author'] != '')) {
-            $taxonomy = $page->taxonomy();
-            $taxonomy['author'][] = $header->aura['author'];
-            $page->taxonomy($taxonomy);
+        if ($page->template() === 'authors') {
+            $post = $this->grav['uri']->post();
+            if ($post) {
+                $authors = isset($post['data']['authors']) ? $post['data']['authors'] : [];
+                $file = File::instance(self::$authorsFile);
+                $file->save(Yaml::dump($authors));
+                $admin = $this->grav['admin'];
+                $admin->setMessage($admin::translate('PLUGIN_ADMIN.SUCCESSFULLY_SAVED'), 'info');
+            }
         }
     }
 
-    /**
-     * Create structured authors array and expose to Twig
-     */
-    public function onTwigSiteVariables()
+    public function onTwigTemplatePaths()
     {
-        $authors = array();
-        $raw = $this->grav['config']->get('plugins.aura-authors.authors');
-        if ($raw) {
-            foreach ($raw as $author) {
-                $authors[$author['label']] = $author;
-            }
-        }
-        $this->grav['twig']->twig_vars['authors'] = $authors;
+        $this->grav['twig']->twig_paths[] = __DIR__ . '/admin/templates';
+    }
+
+    public function onAdminMenu()
+    {
+        $this->grav['twig']->plugins_hooked_nav['Authors'] = ['route' => $this->route, 'icon' => 'fa-users'];
     }
 
     public static function listAuthors() {
-        return self::$authorList;
+        $authorList = [];
+        $authors = self::getAuthors();
+        foreach ($authors as $author) {
+            $authorList[$author['label']] = $author['name'];
+        }
+        asort($authorList);
+        return $authorList;
     }
 
 }
