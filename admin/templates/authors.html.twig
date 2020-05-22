@@ -7,5 +7,5 @@
 {% block content %}
     {% include "forms/form.html.twig" %}
     {% do assets.addCss('user://plugins/aura-authors/admin/assets/style.min.css') %}
-    {% do assets.addInlineJs('$("<i class=\"fa fa-check\"></i> ").prependTo(\"#authorSave\");') %}
+    {% do assets.addJs('user://plugins/aura-authors/admin/assets/admin.min.js', { 'loading':'defer' }) %}
 {% endblock %}

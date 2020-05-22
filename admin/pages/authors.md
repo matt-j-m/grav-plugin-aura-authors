@@ -84,7 +84,7 @@ form:
   buttons:
     submit:
         type: submit
-        value: ' Save'
+        value: Save
         classes: button
         id: authorSave
 ---

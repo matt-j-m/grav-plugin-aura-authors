@@ -15,7 +15,6 @@ class AuraAuthorsPlugin extends Plugin
 {
     protected static $authorsFile = DATA_DIR . 'authors/authors.yaml';
     protected $route = 'authors';
-    static protected $authorList = [];
 
     public static function getAuthors()
     {
@@ -24,13 +23,6 @@ class AuraAuthorsPlugin extends Plugin
           return;
         }
         return Yaml::parse($fileInstance->content());
-    }
-
-    public static function saveAuthors(array $authors)
-    {
-        $file = File::instance(self::$authorsFile);
-        $file->save(Yaml::dump($authors));
-        echo json_encode('Saved');
     }
 
     public function onPluginsInitialized()
