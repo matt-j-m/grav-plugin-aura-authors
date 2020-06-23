@@ -1,7 +1,6 @@
 {% set author = authors[page.header.aura.author] %}
 {% if author %}
     {% set social = [
-        'twitter',
         'linkedin',
         'youtube',
         'facebook',
@@ -13,8 +12,7 @@
     <p class="author-heading">About the author</p>
     <hr />
     {% if author.image %}
-        {% set path = 'user://plugins/aura-authors/assets/' ~ author.image|first.name %}
-        {{ media[path].html('', author.name, 'author-image') }}
+        {{ media['user://images/' ~ author.image|first.name].html('', author.name, 'author-image') }}
     {% endif %}
     <div class="author-text">
         <div>
@@ -24,12 +22,15 @@
             <div class="author-social">
                 <ul>
             {% for item in social %}
-                {% set href = author[item ~ '-url'] %}
+                {% set href = author['person-' ~ item ~ '-url'] %}
                 {% if href %}
                     <li><a href="{{ href }}" target="_blank"><span class="aura-icon-{{ item }}"></span></a></li>
                 {% endif %}
             {% endfor %}
-                </ul>
+            {% if author['person-twitter-user'] %}
+                    <li><a href="https://twitter.com/{{ author['person-twitter-user'] }}" target="_blank"><span class="aura-icon-twitter"></span></a></li>
+            {% endif %}
+                </ul>&nbsp;
             </div>
             <div class="clear-right"></div>
         </div>

@@ -18,7 +18,7 @@ It is recommended to install Aura Authors directly through the Admin Plugin by b
 
 ## Configuration
 
-* Enter author details via the `Authors` section of the Admin Plugin.
+* Enter author details via the Admin Plugin by browsing to `Plugins` > `Aura Authors` and selecting `Add Item`.
 
 * Copy the following code snippet to the relevant Twig template within your theme, at the place where you would like the author bio to be displayed.
 
@@ -32,7 +32,7 @@ It is recommended to install Aura Authors directly through the Admin Plugin by b
 
 ## Usage
 
-Authors can be selected per page via the page editor, on the `Aura` tab. The list of authors will be automatically populated with author records you create via the `Authors` menu item.
+Authors can be selected per page via the page editor, on the `Aura` tab. The list of authors will be automatically populated with author records you create via the Plugins panel.
 
 ## Credits
 
