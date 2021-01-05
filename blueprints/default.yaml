@@ -35,6 +35,9 @@ form:
               type: select
               label: Author
               size: medium
+              multiple: true
+              validate:
+                type: array
               data-options@: '\Grav\Plugin\AuraAuthorsPlugin::listAuthors'
               options:
                 '': ''

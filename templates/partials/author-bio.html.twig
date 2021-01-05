@@ -1,5 +1,8 @@
-{% set author = authors[page.header.aura.author] %}
-{% if author %}
+{% set author_list = [] %}
+{% for a in page.header.aura.author %}
+    {% set author_list = author_list|merge([authors[a]]) %}
+{% endfor %}
+{% if author_list %}
     {% set social = [
         'linkedin',
         'youtube',
