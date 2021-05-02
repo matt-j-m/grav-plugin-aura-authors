@@ -11,7 +11,9 @@
 <div class="author-bio">
     <p class="author-heading">About the author</p>
     <hr />
-    {% if author.image %}
+    {% if author.gravatar %}
+        <img src="http://www.gravatar.com/avatar/{{ author.gravatar|md5 }}" class="author-image" alt="{{ author.name }}" />
+    {% elseif author.image %}
         {{ media['user://images/' ~ author.image|first.name].html('', author.name, 'author-image') }}
     {% endif %}
     <div class="author-text">

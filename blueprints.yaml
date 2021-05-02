@@ -53,6 +53,10 @@ form:
             pattern: "[a-z][a-z0-9_\-]+"
             message: "Use all lowercase letters and replace spaces with hyphens."
             required: true
+        .gravatar:
+          type: text
+          size: large
+          label: Gravatar
         .image:
           type: file
           size: large
