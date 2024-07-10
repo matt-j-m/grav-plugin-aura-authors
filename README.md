@@ -1,3 +1,13 @@
+# Project Ownership
+
+🚀 **Looking for Maintainers**
+
+This project is currently seeking new maintainers to take over development and support. If you're interested or have questions, please open an issue to discuss further.
+
+---
+
+
+
 # Aura Authors Plugin
 
 The **Aura Authors** Plugin for [Grav CMS](https://github.com/getgrav/grav) enables you to store author bios in a centrally managed repository and have them displayed across various pages of your site.
